@@ -1,33 +1,49 @@
 import rodados.*
 import dependencias.*
+import pedidos.*
 
-describe "a"{
-	const deportes = new Dependencia(empleados = 45)
-	const cultura = new Dependencia(empleados = 31)
+describe "probamos dependencias" {
+	const deportes = new Dependencia(empleados=45)
+	const cultura = new Dependencia(empleados=31)
+	const pedido1 = new Pedido(distancia=960,tiempoMaximo=8,cantPasajeros=4,coloresIncompatibles=#{"azul","negro","rojo"})
+	const pedido2 = new Pedido(distancia=960,tiempoMaximo=8,cantPasajeros=4,coloresIncompatibles=#{"negro","rojo","verde"})
+	const pedido3 = new Pedido(distancia=960,tiempoMaximo=8,cantPasajeros=4,coloresIncompatibles=#{"negro","amarillo","verde"})
 	
-	var cachito = new Corsa(color = "rojo")
+	var cachito = new Corsa(color="rojo")
 	
 	method initialize() {
 		deportes.agregarAFlota(cachito)
 		deportes.agregarAFlota(new Corsa(color="azul"))
 		deportes.agregarAFlota(new Corsa(color="verde"))
 		deportes.agregarAFlota(new Kwid(tieneAdicional=true))
-		deportes.agregarAFlota(new AutoEspecial(capacidad=5,velocidad= 160, peso=1200,color="beige"))
+		deportes.agregarAFlota(new AutoEspecial(capacidad=5,peso=1200,velocidad=160,color="beige"))
 		cultura.agregarAFlota(cachito)
-		cultura.agregarAFlota(new Kwid(tieneAdicional= true))
-		cultura.agregarAflota(new Kwid())
+		cultura.agregarAFlota(new Kwid(tieneAdicional=true))
+		cultura.agregarAFlota(new Kwid())
 		trafic.motor(bataton)
 		trafic.interior(popular)
 		cultura.agregarAFlota(trafic)
-	}	
-	
-	test "a"{
-		assert.equals(1300*3+1350+1200, deportes.pesoTotalFlota())
+		deportes.agregarPedido(pedido1)
+		deportes.agregarPedido(pedido2)
+		deportes.agregarPedido(pedido3)
+		
 	}
-	test "b"{
+	
+	test "test peso sobre deportes" {
+		assert.equals(1300*3+1350+1200,deportes.pesoTotalFlota())
+	}
+	
+	test "test esta bien equipada sobre deportes" {
 		assert.that(deportes.estaBienEquipada())
 	}
-	test"c"{
-		assert.equals(4 + 3,deportes.capacidadTotalEnColor("azul"))
+
+	test "test capacidad de color azul sobre deportes" {
+		assert.equals(4+3,deportes.capacidadTotalEnColor("azul"))
 	}
+
+	test "test capacidad faltante sobre deportes" {
+		assert.equals(25,deportes.capacidadFaltante())
+	}
+
+
 }
